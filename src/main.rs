@@ -10,8 +10,9 @@ fn main() {
     };
     let tokens: Vec<String> = Vec::new();
     let mut reader = character_reader::Reader::new(path::Path::new(file_path));
-    for _ in 0..5 {
-        println!("{}", reader.consume());
-    }
+    for i in 0..38 { reader.consume(); }
+    println!("{}", reader.is_eof());
+    reader.consume();
+    println!("{}", reader.is_eof());
 }
 

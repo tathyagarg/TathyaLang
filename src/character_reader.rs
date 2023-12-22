@@ -1,5 +1,7 @@
 use std::{path, fs, collections};
 
+struct IndexingError { message: String }
+
 pub fn format_bool(status: bool) -> &'static str {
     if status {
         "passed"
@@ -17,9 +19,10 @@ pub trait ReaderFuncs<'a> {
     fn new(file_path: &'a path::Path) -> Self;
     fn verify_path(&self) -> bool;
     fn initialize(&mut self) -> &mut Self;
-    fn peek(&self, position: u16) -> char;
+    fn peek(&self, position: u16) -> std::result::Result<char, IndexingError>;
     fn consume(&mut self) -> char;
     fn is_eof(&self) -> bool;
+    fn file_length(&self) -> usize;
 }
 
 impl<'a> ReaderFuncs<'a> for Reader<'a> {
@@ -54,8 +57,13 @@ impl<'a> ReaderFuncs<'a> for Reader<'a> {
         self
     }
 
-    fn peek(&self, position: u16) -> char {
-        self.contents.chars().nth(position as usize).expect("Position not found")
+    fn peek(&self, position: u16) -> std::result::Result<char, IndexingError> {
+        let length: u16 = self.contents.chars().count() as u16;
+
+        match position {
+            n if (length..).contains(&n) => Err(IndexingError { message: String::from("Querying position more than contents length") }),
+            _ => Ok(self.contents.chars().nth(position as usize).expect("Position not found")),
+        }
     }
 
     fn consume(&mut self) -> char {
@@ -66,7 +74,11 @@ impl<'a> ReaderFuncs<'a> for Reader<'a> {
     }
 
     fn is_eof(&self) -> bool {
-        // TODO
-        false
+        match self.peek(0) {
+            Ok(_) => false,
+            Err(_) => true,
+        }
     }
+
+    fn file_length(&self) -> usize { self.contents.chars().count() }
 }
