@@ -18,7 +18,7 @@ pub trait ReaderFuncs<'a> {
     fn verify_path(&self) -> bool;
     fn initialize(&mut self) -> &mut Self;
     fn peek(&self, position: u16) -> char;
-    fn consume(&mut self, position: u16) -> char;
+    fn consume(&mut self) -> char;
     fn is_eof(&self) -> bool;
 }
 
@@ -58,9 +58,11 @@ impl<'a> ReaderFuncs<'a> for Reader<'a> {
         self.contents.chars().nth(position as usize).expect("Position not found")
     }
 
-    fn consume(&mut self, position: u16) -> char {
-        // TODO
-        'a'
+    fn consume(&mut self) -> char {
+        let mut char_contents: std::str::Chars = self.contents.chars();
+        let popped_char: char = char_contents.next().expect("Error");
+        self.contents = String::from(char_contents.as_str());
+        popped_char
     }
 
     fn is_eof(&self) -> bool {

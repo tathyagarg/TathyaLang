@@ -9,7 +9,9 @@ fn main() {
         _ => return println!("Error: File not specified")
     };
     let tokens: Vec<String> = Vec::new();
-    let reader = character_reader::Reader::new(path::Path::new(file_path));
-    println!("{}", reader.peek(3));
+    let mut reader = character_reader::Reader::new(path::Path::new(file_path));
+    for _ in 0..5 {
+        println!("{}", reader.consume());
+    }
 }
 
