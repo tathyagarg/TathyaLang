@@ -2,3 +2,13 @@
 name = "TathyaLang"
 version = "0.1.0"
 edition = "2021"
+
+[lib]
+name = "TathyaLang"
+crate-type = ["cdylib"]
+path = "src/main.rs"
+
+[dependencies.pyo3]
+version = "0.20.0"
+
+features = ["abi3-py38"]
