@@ -4,3 +4,4 @@ My custom language that I made because everybody needs their own programming lan
 No it doesn't have a logo yet (it doesn't need one).
 
 ## Discontinued (I don't understand rust) (Maybe I'll give it a go in rust again later on)
+Using python to rewrite it
